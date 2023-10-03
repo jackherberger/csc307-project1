@@ -47,6 +47,16 @@ const addUser = (user) => {
     return user;
 }
 
+const deleteUser = (id) => {
+    const userIndex = users.users_list.findIndex((user) => user.id === id);
+    if (userIndex === -1) {
+      return undefined;
+    }
+    users.users_list.splice(userIndex, 1);
+  
+    return { message: 'User deleted successfully' }; // Return an object, not res.json()
+  };
+  
 
 const findUserById = (id) =>
     users['users_list']
@@ -62,7 +72,7 @@ app.get('/users/:id', (req, res) => {
     const id = req.params['id']; //or req.params.id
     let result = findUserById(id); 
     if (result === undefined) {
-        res.status(404).send('Resource not found.');
+        res.status(404).send('Resource not found.');    
     } else {
         res.send(result);
     }
@@ -85,6 +95,16 @@ app.post('/users', (req, res) => {
     addUser(userToAdd);
     res.send();
 });
+
+app.delete('/users/:id', (req, res) => {
+    const id = req.params['id']; //or req.params.id
+    let result = deleteUser(id);
+    if (result === undefined) {
+      res.status(404).send('Resource not found.');
+    } else {
+      res.json(result); // Send the result as JSON
+    }
+  });
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
