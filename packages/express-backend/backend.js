@@ -54,9 +54,14 @@ const deleteUser = (id) => {
     }
     users.users_list.splice(userIndex, 1);
   
-    return { message: 'User deleted successfully' }; // Return an object, not res.json()
+    return { message: 'User deleted successfully' }; // Return an object, not res.json() - will do that in return 
   };
-  
+  const findUserByNameAndJob = (name, job) => { 
+    return users['users_list']
+        .filter( (user) => 
+            user['name'] === name && user['job'] == job); 
+}
+
 
 const findUserById = (id) =>
     users['users_list']
@@ -67,6 +72,23 @@ app.get('/', (req, res) => {
     res.send('Hello World!');
 });    
 
+app.get('/users', (req, res) => {
+    const name = req.query.name;
+    const job = req.query.job;
+    if (name != undefined && job != undefined){
+        let result = findUserByNameAndJob(name, job);
+        result = {users_list: result};
+        res.send(result);
+    }
+    else if (name != undefined){
+        let result = findUserByName(name);
+        result = {users_list: result};
+        res.send(result);
+    }
+    else{
+        res.send(users);
+    }
+});
 
 app.get('/users/:id', (req, res) => {
     const id = req.params['id']; //or req.params.id
@@ -78,17 +100,7 @@ app.get('/users/:id', (req, res) => {
     }
 });
 
-app.get('/users', (req, res) => {
-    const name = req.query.name;
-    if (name != undefined){
-        let result = findUserByName(name);
-        result = {users_list: result};
-        res.send(result);
-    }
-    else{
-        res.send(users);
-    }
-});
+
 
 app.post('/users', (req, res) => {
     const userToAdd = req.body;
@@ -105,6 +117,7 @@ app.delete('/users/:id', (req, res) => {
       res.json(result); // Send the result as JSON
     }
   });
+
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
