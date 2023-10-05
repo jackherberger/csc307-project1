@@ -15,13 +15,28 @@ function MyApp() {
     setCharacters(updated);
   }
 
-  function updateList(person) { 
+  
+
+  function updateList(person) {
     postUser(person)
-      .then(() => setCharacters([...characters, person]))
-      .catch((error) => {
-        console.log(error);
-      })
-}
+      .then(res => {
+        if (res.status === 201) {
+          return res.json();
+        }
+        else {
+          throw new Error(`Received status code ${res.status}`);
+        }  
+       })
+
+        .then(data => {
+            setCharacters([...characters, data]);
+          })
+      .catch(error => {
+        console.error('There was a problem with the POST request:', error);
+      });
+  }
+
+
 
   function fetchUsers() {
     const promise = fetch("http://localhost:8000/users");

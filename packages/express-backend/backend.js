@@ -46,6 +46,8 @@ const findUserByName = (name) => {
 }
 
 const addUser = (user) => {
+    const random = Math.floor((Math.random() * 1000000), 2);
+    user["id"] = random.toString();
     users['users_list'].push(user);
     return user;
 }
@@ -107,8 +109,8 @@ app.get('/users/:id', (req, res) => {
 
 app.post('/users', (req, res) => {
     const userToAdd = req.body;
-    addUser(userToAdd);
-    res.send();
+    const user = addUser(userToAdd);
+    res.status(201).send(user);
 });
 
 app.delete('/users/:id', (req, res) => {
