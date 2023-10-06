@@ -44,9 +44,15 @@ const findUserByName = (name) => {
     return users['users_list']
         .filter( (user) => user['name'] === name); 
 }
+const generateRandomID = () => {
+    const randomLetters = Array.from({ length: 3 }, () => String.fromCharCode(Math.floor(Math.random() * 26) + 97)).join('');
+    const randomNumbers = Array.from({ length: 3 }, () => Math.floor(Math.random() * 10)).join('');
+    const random = randomLetters + randomNumbers;
+    return random;
+}
 
 const addUser = (user) => {
-    const random = Math.floor((Math.random() * 1000000), 2);
+    const random = generateRandomID();
     user["id"] = random.toString();
     users['users_list'].push(user);
     return user;
