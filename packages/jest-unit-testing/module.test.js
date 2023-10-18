@@ -21,7 +21,7 @@ test('Testing div -- success', () => {
 test('Testing div -- fail', () => {
     const expected = 1;
     const got = mut.div(12, 6);
-    expect(got).not.toBe(expected);
+    expect(got).not.toEqual(expected);
 })
 
 test('Testing containsNumber -- success', () => {
